@@ -61,4 +61,53 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  // Category filter + search
+  const filterPills = document.querySelectorAll(".filter-pill");
+  const searchInput = document.getElementById("receipt-search");
+  const searchClear = document.getElementById("search-clear");
+  const noResults = document.getElementById("no-results");
+  const cards = document.querySelectorAll(".product-grid .card");
+  let activeCategory = "all";
+
+  function applyFilters() {
+    const q = (searchInput.value || "").trim().toLowerCase();
+    let visible = 0;
+    cards.forEach((card) => {
+      const matchesCat =
+        activeCategory === "all" || card.dataset.category === activeCategory;
+      let matchesSearch = true;
+      if (q) {
+        const parts = [
+          card.querySelector(".claim"),
+          card.querySelector(".tagline"),
+          card.querySelector(".blurb"),
+          card.querySelector(".cat-tag"),
+        ].map((el) => (el ? el.textContent : ""));
+        card.querySelectorAll(".inside li").forEach((li) => parts.push(li.textContent));
+        matchesSearch = parts.join(" ").toLowerCase().includes(q);
+      }
+      const show = matchesCat && matchesSearch;
+      card.classList.toggle("is-hidden", !show);
+      if (show) visible++;
+    });
+    noResults.hidden = visible > 0;
+    searchClear.hidden = !searchInput.value;
+  }
+
+  filterPills.forEach((pill) => {
+    pill.addEventListener("click", () => {
+      filterPills.forEach((p) => p.classList.remove("active"));
+      pill.classList.add("active");
+      activeCategory = pill.dataset.filter;
+      applyFilters();
+    });
+  });
+
+  searchInput.addEventListener("input", applyFilters);
+  searchClear.addEventListener("click", () => {
+    searchInput.value = "";
+    applyFilters();
+    searchInput.focus();
+  });
 });
