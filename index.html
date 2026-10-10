@@ -76,10 +76,26 @@
     <div class="section-head"><span class="plaque alt">The receipts</span></div>
     <p class="section-sub">Each receipt is a complete research package. Buy one, or wait for the bundle — every receipt stands on its own.</p>
 
+    <div class="catalog-tools">
+      <div class="search-wrap">
+        <input type="text" id="receipt-search" placeholder="Search receipts..." aria-label="Search receipts" autocomplete="off">
+        <button type="button" class="search-clear" id="search-clear" aria-label="Clear search" hidden>&times;</button>
+      </div>
+      <div class="filter-pills" role="group" aria-label="Filter by category">
+        <button type="button" class="filter-pill active" data-filter="all">All</button>
+        <button type="button" class="filter-pill" data-filter="ai-content">AI &amp; Content</button>
+        <button type="button" class="filter-pill" data-filter="ai-services">AI &amp; Services</button>
+        <button type="button" class="filter-pill" data-filter="ai-affiliate">AI &amp; Affiliate</button>
+        <button type="button" class="filter-pill" data-filter="content-creation">Content Creation</button>
+      </div>
+    </div>
+    <p class="no-results" id="no-results" hidden>No receipts match your search. Try a different term or category.</p>
+
     <div class="product-grid">
 
-      <article class="card live">
+      <article class="card live" data-category="ai-content">
         <span class="badge live">Available now</span>
+        <span class="cat-tag">AI &amp; Content</span>
         <h3 class="claim">"$2,000 in a week" with AI characters on TikTok Shop</h3>
         <p class="tagline">The method, the real numbers behind the claim, and the tools to run it properly.</p>
         <p class="blurb">A widely watched video claims its creator made $2,000 in a week with AI-generated characters promoting supplements on TikTok Shop. This is that method, laid out so you can run it: the claim beside the creator's own screens, every dashboard number day by day, an 11-step checklist with its 9 gaps marked, the real costs, the platform rules, three worksheets, a 30-day plan and a tracker spreadsheet.</p>
@@ -99,8 +115,9 @@
         </div>
       </article>
 
-      <article class="card">
+      <article class="card" data-category="ai-services">
         <span class="badge soon">Coming soon</span>
+        <span class="cat-tag">AI &amp; Services</span>
         <h3 class="claim">"$1,000 a photo bundle" with AI food photos for local restaurants</h3>
         <p class="tagline">The method, the real numbers behind the claim, and the tools to run it properly.</p>
         <p class="blurb">A widely watched video says a restaurant's poor food photos can be fixed with an AI image model and sold back to the restaurant at $1,000 a bundle. The six-move image workflow, the outreach message with follow-ups, the pricing sheet — and the 10 gaps nobody mentions.</p>
@@ -121,8 +138,9 @@
         </div>
       </article>
 
-      <article class="card">
+      <article class="card" data-category="ai-services">
         <span class="badge soon">Coming soon</span>
+        <span class="cat-tag">AI &amp; Services</span>
         <h3 class="claim">"$1,000 weekend" service offer built with AI prompts</h3>
         <p class="tagline">The method, the prompts, and the tools to run it properly.</p>
         <p class="blurb">A widely watched video says five prompts, a skill you already have, and a message to people who already know you can make a first thousand-dollar weekend. The five prompts in our words, the real costs, the tool's own terms — and the 6 gaps in the 7-step checklist.</p>
@@ -143,8 +161,9 @@
         </div>
       </article>
 
-      <article class="card">
+      <article class="card" data-category="content-creation">
         <span class="badge soon">Coming soon</span>
+        <span class="cat-tag">Content Creation</span>
         <h3 class="claim">"$1,000 in a week" from short product videos for brands</h3>
         <p class="tagline">The method, the real numbers behind the claim, and the tools to run it properly.</p>
         <p class="blurb">A widely watched video claims its narrator made about $1,000 in about a week from a creator app where brands pay for short videos of people testing their products. Every screen read line by line, the arithmetic the headline needs, the platform's rules quoted from its own pages.</p>
@@ -165,8 +184,9 @@
         </div>
       </article>
 
-      <article class="card">
+      <article class="card" data-category="ai-affiliate">
         <span class="badge soon">Coming soon</span>
+        <span class="cat-tag">AI &amp; Affiliate</span>
         <h3 class="claim">"$202k in 30 days" with AI characters and affiliate links</h3>
         <p class="tagline">The method, the real numbers behind the claim, and the tools to run it properly.</p>
         <p class="blurb">A widely watched video claims a member of its presenter's team made $202,000 of profit in a month with AI-generated character videos pushing viewers to affiliate links. The revenue-to-earnings arithmetic at the public rate, every dashboard field read for two months, the platform rules — and the 9 gaps in the 10-step checklist.</p>
@@ -198,6 +218,17 @@
       <h3>Buy once. Get every update free.</h3>
       <p>Every receipt gets a full review once a year &mdash; the numbers re-checked, the method re-tested, the worksheets refreshed. And if something significant changes in between &mdash; a platform rule change, a method that stops working, a major new finding &mdash; you get that update too. Free, no re-buying, no upgrade fees.</p>
       <p class="updates-fine">Just opt in at checkout and keep your email current. If we can&rsquo;t reach you, we can&rsquo;t send it.</p>
+    </div>
+  </div>
+</section>
+
+<section class="referral">
+  <div class="wrap">
+    <div class="section-head"><span class="plaque">Referrals</span></div>
+    <div class="referral-box">
+      <h3>Tell a friend. Get a receipt free.</h3>
+      <p>Share your unique link. When 3 people buy through it, you pick any receipt &mdash; free. No limits, no expiration. The more you share, the more you earn.</p>
+      <p class="referral-fine">Your referral link will be in your purchase confirmation email.</p>
     </div>
   </div>
 </section>
