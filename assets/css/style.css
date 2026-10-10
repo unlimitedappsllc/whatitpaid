@@ -296,6 +296,32 @@ a:hover { color: var(--green-clay); }
   padding-right: 120px;
   text-shadow: 0 2px 0 rgba(0,0,0,.4);
 }
+
+.lifetime {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--green-clay-hi);
+  margin: 18px 0 20px;
+}
+.lifetime::before {
+  content: "\2713";
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--green-clay-hi), var(--green-clay-deep));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 900;
+  flex-shrink: 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.35), 0 3px 8px rgba(0,0,0,.3);
+}
+
 .card .tagline {
   color: var(--green-clay-hi);
   font-weight: 800;
@@ -453,6 +479,45 @@ a:hover { color: var(--green-clay); }
 }
 .receipt-link { display: inline-block; margin-top: 26px; font-weight: 800; }
 
+
+/* ============ lifetime updates — green clay value card ============ */
+.updates { padding: 30px 0 10px; }
+.updates-box {
+  background: linear-gradient(180deg, var(--green-clay-hi), var(--green-clay) 45%, var(--green-clay-deep));
+  border-radius: 32px;
+  padding: 50px 44px;
+  max-width: 680px;
+  margin: 38px auto 0;
+  color: #fff;
+  text-align: center;
+  border: 1px solid rgba(0,0,0,.25);
+  box-shadow:
+    0 24px 55px rgba(35,122,58,.35),
+    inset 0 3px 0 rgba(255,255,255,.35),
+    inset 0 -6px 0 rgba(0,0,0,.25);
+}
+.updates-box h3 {
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin-bottom: 14px;
+  text-shadow: 0 2px 4px rgba(0,0,0,.25);
+}
+.updates-box p {
+  font-size: 16.5px;
+  font-weight: 600;
+  line-height: 1.6;
+  max-width: 560px;
+  margin: 0 auto 14px;
+  text-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+.updates-box .updates-fine {
+  font-size: 14px;
+  font-weight: 700;
+  opacity: .92;
+  margin-bottom: 0;
+}
+
 /* ============ email capture — clay inbox ============ */
 .signup { padding: 40px 0 90px; text-align: center; }
 .signup-box {
@@ -574,4 +639,5 @@ footer .copy { color: #8a8272; font-size: 13px; }
   .promise-strip, .signup, footer { text-align: center; }
   .how-card, .card, .signup-box { text-align: left; }
   .card-foot { text-align: center; }
+  .updates-box { padding: 38px 26px; }
 }
