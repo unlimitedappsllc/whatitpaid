@@ -16,6 +16,17 @@
   --font: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --script: "Great Vibes", cursive;
 }
+/* ============ What It Paid clay color font (v2.200) ============ */
+@font-face {
+  font-family: "WIPClay";
+  src: url("../fonts/WhatItPaidClayColor-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --clay-font: "WIPClay", "Nunito", -apple-system, BlinkMacSystemFont, sans-serif;
+}
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -26,7 +37,7 @@ body {
   color: var(--clay-ink);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  background: #ece5d3 url("../img/clay-bg.jpg") center top / cover fixed;
+  background: #ece5d3 url("../img/clay-bg.jpg") center top / cover;
   min-height: 100vh;
 }
 
@@ -97,14 +108,14 @@ a:hover { color: var(--green-clay); }
   box-shadow: 0 8px 20px rgba(26,23,19,.25), inset 0 2px 0 rgba(255,255,255,.1);
 }
 .hero h1 {
-  font-size: clamp(36px, 5.6vw, 64px);
-  line-height: 1.08;
-  font-weight: 900;
-  letter-spacing: -1px;
+  font-family: var(--clay-font);
+  font-size: clamp(38px, 5.8vw, 68px);
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: 0;
   max-width: 860px;
   margin: 0 auto 20px;
   color: var(--clay-ink);
-  text-shadow: 0 2px 0 rgba(255,255,255,.5);
 }
 .hero h1 .hl { color: var(--green-clay-deep); }
 .hero p.lede {
@@ -170,9 +181,8 @@ a:hover { color: var(--green-clay); }
     0 12px 28px rgba(26,23,19,.3),
     inset 0 3px 0 rgba(255,255,255,.1),
     inset 0 -4px 0 rgba(0,0,0,.3);
-  transform: rotate(-1deg);
 }
-.plaque.alt { transform: rotate(1deg); }
+
 .section-head { text-align: center; margin-bottom: 8px; }
 .section-sub {
   text-align: center;
@@ -202,9 +212,7 @@ a:hover { color: var(--green-clay); }
     inset 0 -5px 0 rgba(0,0,0,.28);
   border: 1px solid rgba(0,0,0,.25);
 }
-.how-card:nth-child(1) { transform: rotate(-.8deg); }
-.how-card:nth-child(2) { transform: rotate(.5deg); }
-.how-card:nth-child(3) { transform: rotate(-.4deg); }
+
 .how-card .step {
   display: inline-block;
   font-size: 13px;
@@ -245,9 +253,8 @@ a:hover { color: var(--green-clay); }
     inset 0 -6px 0 rgba(0,0,0,.35);
   transition: transform .18s ease;
 }
-.card:nth-child(odd) { transform: rotate(-.5deg); }
-.card:nth-child(even) { transform: rotate(.5deg); }
-.card:hover { transform: rotate(0deg) translateY(-4px); }
+
+.card:hover { transform: translateY(-4px); }
 .card.live {
   box-shadow:
     0 22px 50px rgba(26,23,19,.35),
@@ -272,13 +279,12 @@ a:hover { color: var(--green-clay); }
   color: #fff;
   text-shadow: 0 1px 2px rgba(0,0,0,.3);
   box-shadow: 0 6px 14px rgba(35,122,58,.45), inset 0 2px 0 rgba(255,255,255,.35);
-  transform: rotate(3deg);
 }
 .badge.soon {
   background: #4a4438;
   color: var(--ivory-dim);
   box-shadow: inset 0 2px 0 rgba(255,255,255,.12), 0 4px 10px rgba(0,0,0,.3);
-  transform: rotate(-3deg);
+
 }
 
 .card .claim {
@@ -413,7 +419,7 @@ a:hover { color: var(--green-clay); }
   padding: 44px 48px 34px;
   position: relative;
   box-shadow: 0 24px 60px rgba(26,23,19,.3);
-  transform: rotate(-.7deg);
+
   /* receipt zigzag bottom */
   --zz: 14px;
   clip-path: polygon(
@@ -441,7 +447,7 @@ a:hover { color: var(--green-clay); }
   border: 3px solid var(--green-clay-deep);
   border-radius: 8px;
   padding: 8px 20px;
-  transform: rotate(-4deg);
+
   text-transform: uppercase;
   opacity: .85;
 }
@@ -461,7 +467,7 @@ a:hover { color: var(--green-clay); }
     0 24px 55px rgba(26,23,19,.35),
     inset 0 3px 0 rgba(255,255,255,.1),
     inset 0 -6px 0 rgba(0,0,0,.35);
-  transform: rotate(.4deg);
+
 }
 .signup-box h3 { font-size: 25px; margin-bottom: 8px; font-weight: 900; }
 .signup-box p { color: var(--ivory-dim); margin-bottom: 26px; font-size: 15.5px; }
@@ -516,8 +522,7 @@ a:hover { color: var(--green-clay); }
   border: 1px solid rgba(0,0,0,.3);
   box-shadow: 0 14px 32px rgba(26,23,19,.28), inset 0 2px 0 rgba(255,255,255,.08), inset 0 -4px 0 rgba(0,0,0,.3);
 }
-.promise-list li:nth-child(odd) { transform: rotate(-.4deg); }
-.promise-list li:nth-child(even) { transform: rotate(.4deg); }
+
 .promise-list li::before {
   content: "✓";
   position: absolute;
@@ -560,4 +565,13 @@ footer .copy { color: #8a8272; font-size: 13px; }
   .card { padding: 30px 26px; }
   .card-foot { flex-direction: column; align-items: stretch; text-align: center; }
   .btn-buy, .btn-notify { text-align: center; }
+}
+
+/* ============ mobile centering hardening ============ */
+@media (max-width: 760px) {
+  .wrap { padding: 0 20px; }
+  .hero, .section-head, .section-sub,
+  .promise-strip, .signup, footer { text-align: center; }
+  .how-card, .card, .signup-box { text-align: left; }
+  .card-foot { text-align: center; }
 }
