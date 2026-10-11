@@ -46,18 +46,56 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Email capture (frontend only — backend wiring comes later)
+  // Email capture — POSTs to the /api/notify Pages Function (KV-backed).
+  // Shows honest states: sending, success, or a real error (no fake wins).
   const form = document.getElementById("notify-form");
   if (form) {
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const input = form.querySelector('input[type="email"]');
       const done = document.getElementById("notify-done");
-      if (input && input.value && done) {
-        // TODO: POST to email backend when wired
-        console.log("notify signup:", input.value);
-        form.style.display = "none";
-        done.style.display = "block";
+      const btn = form.querySelector('button[type="submit"]');
+      if (!input || !input.value) return;
+
+      const originalBtn = btn ? btn.textContent : "";
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Joining…";
+      }
+
+      try {
+        const res = await fetch("/api/notify", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ email: input.value.trim(), source: "notify-form" }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.ok) {
+          form.style.display = "none";
+          if (done) done.style.display = "block";
+        } else if (data.error === "invalid_email") {
+          input.setCustomValidity("That email doesn't look right — mind checking it?");
+          input.reportValidity();
+          input.setCustomValidity("");
+        } else {
+          throw new Error(data.error || "request failed");
+        }
+      } catch (err) {
+        console.error("notify signup failed:", err);
+        if (btn) {
+          btn.textContent = "Something broke — try again";
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.textContent = originalBtn;
+          }, 3000);
+        } else {
+          alert("Couldn't save your email just now — please try again in a minute.");
+        }
+      } finally {
+        if (btn && btn.disabled && btn.textContent === "Joining…") {
+          btn.disabled = false;
+          btn.textContent = originalBtn;
+        }
       }
     });
   }
