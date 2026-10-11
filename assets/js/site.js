@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       try {
-        const res = await fetch("/api/notify", {
+        const res = await fetch("https://whatitpaid-app.roject--undred-old.workers.dev/api/notify", {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ email: input.value.trim(), source: "notify-form" }),
