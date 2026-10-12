@@ -17,7 +17,7 @@ const ALLOWED_ORIGINS = [
 //     own URL so test magic links resolve against the test deployment)
 //   - env.STRIPE_SECRET_KEY    (Worker secret; Stripe TEST key in testing)
 //   - env.STRIPE_WEBHOOK_SECRET (Worker secret, from the webhook endpoint)
-//   - env.PRICE_RECEIPT_01..06, PRICE_3PACK, PRICE_LIBRARY (plain env vars
+//   - env.PRICE_RECEIPT_01..05, PRICE_3PACK, PRICE_LIBRARY (plain env vars
 //     holding Stripe Price IDs — swapping test<->live is config-only)
 //   - KV always via the NOTIFY_KV binding (whichever namespace is bound)
 // While STRIPE_SECRET_KEY is absent, /api/checkout and /api/stripe-webhook
@@ -33,7 +33,7 @@ function siteBase(env) {
 }
 const RECEIPT_IDS = [
   "receipt-01", "receipt-02", "receipt-03",
-  "receipt-04", "receipt-05", "receipt-06",
+  "receipt-04", "receipt-05",
 ];
 // Curated starter trios (bundle-3pack-spec.md): trio id -> fixed receipt ids.
 // Placeholder membership until the catalog locks; price is PRICE_3PACK either way.
@@ -45,8 +45,7 @@ const RECEIPT_NAMES = {
   "receipt-02": "Receipt 02 — AI Food Photos for Restaurants",
   "receipt-03": "Receipt 03 — AI Prompt Service",
   "receipt-04": "Receipt 04 — Short Product Videos",
-  "receipt-05": "Receipt 05 — (title TBD)",
-  "receipt-06": "Receipt 06 — AI Characters + Affiliate Links",
+  "receipt-05": "Receipt 05 — AI Characters + Affiliate Links",
   "library": "The Full Library (every Receipt, forever)",
 };
 const MAGIC_TTL_SECONDS = 90 * 24 * 3600;   // magic token lifetime: 90 days
