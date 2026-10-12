@@ -784,3 +784,8 @@ footer .copy { color: #8a8272; font-size: 13px; }
   .referral-box { padding: 38px 26px; }
   .catalog-tools { margin-top: 22px; }
 }
+
+/* Unlimited Apps brand standard */
+.brandlock { display: flex; align-items: center; }
+.by-ua { font-family: 'Great Vibes', cursive; font-size: 22px; color: #6b6459; border-left: 1px solid #d4cdbd; padding-left: 12px; margin-left: 12px; text-decoration: none; white-space: nowrap; }
+.by-ua:hover { color: #1a1713; text-decoration: underline; }
