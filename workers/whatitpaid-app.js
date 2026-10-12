@@ -191,6 +191,11 @@ export default {
       return new Response(res.body, { status: res.status, headers });
     }
 
+    if (url.pathname === "/checkout/success" && request.method === "GET") {
+      return new Response(checkoutSuccessPage(env), {
+        headers: { "content-type": "text/html; charset=utf-8" } });
+    }
+
     if (url.pathname === "/api/stripe-webhook" && request.method === "POST") {
       return handleStripeWebhook(request, env);
     }
@@ -847,6 +852,18 @@ function readerPage(env, email, ownedIds) {
 
 function expiredPage(env) {
   return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Link expired — What It Paid</title></head><body style="margin:0;padding:40px 20px;background:#1a1713;font-family:sans-serif;text-align:center;"><div style="max-width:480px;margin:0 auto;"><p style="font-size:28px;color:#f4efe3;margin-bottom:16px;">What It Paid</p><p style="font-size:18px;color:#f4efe3;">This link has expired.</p><p style="color:#a8a094;">Enter the email you bought with and we'll send a fresh link.</p><form id="resend-form" style="margin-top:24px;"><input type="email" name="email" required placeholder="you@example.com" style="padding:12px 16px;border-radius:10px;border:0;font-size:16px;width:70%;max-width:300px;"><br><button type="submit" style="margin-top:14px;padding:12px 28px;border-radius:10px;border:0;background:#35a852;color:#fff;font-size:16px;font-weight:700;cursor:pointer;">Send me a new link</button></form><p id="resend-msg" style="color:#35a852;margin-top:16px;"></p><p style="margin-top:32px;"><a href="${siteBase(env)}" style="color:#35a852;">Back to whatitpaid.com</a></p></div><script>document.getElementById("resend-form").addEventListener("submit",async(e)=>{e.preventDefault();const email=new FormData(e.target).get("email");try{await fetch("/api/magic-link/resend",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({email})});}catch(_){}document.getElementById("resend-msg").textContent="If this email has purchases, a new link is on its way.";});</script></body></html>`;
+}
+
+// --- GET /checkout/success ------------------------------------------------------
+// Stripe redirects the buyer here after payment (success_url in
+// handleCheckout). Static confirmation only: purchase completion itself runs
+// through the webhook -> magic-link email path, so this page makes no
+// per-purchase claims. Support contact matches the mail convention used by
+// every sender in this file (hello@whatitpaid.com; the magic-link email tells
+// buyers to reply for a fresh link).
+
+function checkoutSuccessPage(env) {
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Payment received — What It Paid</title></head><body style="margin:0;padding:40px 20px;background:#f4efe3;font-family:sans-serif;"><div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:26px;padding:40px 36px;"><p style="font-size:26px;font-weight:800;color:#1a1713;margin:0 0 8px;">Payment received 🧾</p><p style="color:#5a5347;font-size:15px;line-height:1.7;margin:0 0 16px;">Thanks — your payment went through. Your access link is on its way to the email address you used at checkout.</p><p style="color:#5a5347;font-size:15px;line-height:1.7;margin:0 0 16px;">That one link opens your library — everything you own, no account and no password. It stays good for 90 days, and you can always get a fresh one.</p><p style="color:#5a5347;font-size:15px;line-height:1.7;margin:0;">Don&apos;t see it in a few minutes? Check your spam or promotions folder. Still nothing? Email us at <a href="mailto:hello@whatitpaid.com" style="color:#35a852;">hello@whatitpaid.com</a> and we&apos;ll sort it out.</p><p style="margin-top:20px;"><a href="${siteBase(env)}" style="color:#35a852;">whatitpaid.com</a></p></div></body></html>`;
 }
 
 // --- POST /api/magic-link/resend ----------------------------------------------
