@@ -25,6 +25,8 @@ const ALLOWED_ORIGINS = [
 // route behaves exactly as before.
 // Specs: checkout-build-spec.md, magic-link-access-design.md,
 // referral-tracking-system-design.md (goal files dir).
+// v3 (2026-10-16): ASSET_RECEIPTS gains receipt-02 (flip-book + workbook
+// PDF uploaded to KV ahead of its launch). One-line diff from v2.
 // v2 (2026-10-16): the library page now links each owned Receipt to its
 // gated assets — GET /read/{token}/{receipt-id} serves the flip-book HTML
 // and /read/{token}/{receipt-id}.pdf the workbook PDF, both read from KV
@@ -865,7 +867,7 @@ async function handleRead(request, env, token) {
 // Receipts whose gated assets (flip-book HTML + workbook PDF) are stored in
 // KV under asset:{id}:html / asset:{id}:pdf. A Receipt joins this list when
 // its assets are uploaded at its launch.
-const ASSET_RECEIPTS = ["receipt-01"];
+const ASSET_RECEIPTS = ["receipt-01", "receipt-02"];
 const ASSET_SLUG_RE = /^receipt-\d{2}(\.pdf)?$/;
 
 function isAssetSlug(s) {
