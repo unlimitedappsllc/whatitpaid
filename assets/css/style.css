@@ -802,5 +802,5 @@ footer .copy { color: #8a8272; font-size: 13px; }
   .btn-small { padding: 8px 13px; font-size: 13px; white-space: nowrap; }
   .hero { padding: 40px 0 8px; }
   .hero-mark img { width: 84px; margin-bottom: 16px; }
-  .hero h1 { font-size: clamp(29px, 8.6vw, 68px); }
+  .hero h1 { font-size: clamp(28px, 7.9vw, 68px); }
 }
