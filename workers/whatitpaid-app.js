@@ -25,6 +25,12 @@ const ALLOWED_ORIGINS = [
 // route behaves exactly as before.
 // Specs: checkout-build-spec.md, magic-link-access-design.md,
 // referral-tracking-system-design.md (goal files dir).
+// v2 (2026-10-16): the library page now links each owned Receipt to its
+// gated assets — GET /read/{token}/{receipt-id} serves the flip-book HTML
+// and /read/{token}/{receipt-id}.pdf the workbook PDF, both read from KV
+// (asset:{id}:html / asset:{id}:pdf) after the token/cookie ownership
+// check; the same routes work tokenless via the wip_session cookie.
+// Per flip-book-access-decisions.md (magic-link library; PDF alongside).
 // ============================================================================
 
 // Base URL for everything the new routes link to (site pages + /read links).
@@ -209,8 +215,21 @@ export default {
 
     if (url.pathname === "/read" || url.pathname.startsWith("/read/")) {
       if (request.method === "GET") {
-        const token = url.pathname.slice("/read/".length).replace(/\/.*$/, "");
-        return handleRead(request, env, TOKEN_RE.test(token) ? token : null);
+        const segments = url.pathname.slice("/read/".length)
+          .split("/").filter(Boolean);
+        // /read/{asset} -> gated asset via the session cookie;
+        // /read/{token}/{asset} -> gated asset via the magic token;
+        // /read/{token} (or bare /read) -> the library page.
+        if (segments.length > 0 && !TOKEN_RE.test(segments[0]) &&
+            isAssetSlug(segments[0])) {
+          return handleAsset(request, env, null, segments[0]);
+        }
+        const token = segments.length > 0 && TOKEN_RE.test(segments[0])
+          ? segments[0] : null;
+        if (token && segments.length > 1) {
+          return handleAsset(request, env, token, segments[1]);
+        }
+        return handleRead(request, env, token);
       }
     }
 
@@ -840,14 +859,81 @@ async function handleRead(request, env, token) {
     headers["set-cookie"] =
       `wip_session=${token}; Path=/read; Max-Age=${SESSION_COOKIE_SECONDS}; HttpOnly; Secure; SameSite=Lax`;
   }
-  return new Response(readerPage(env, rec.email, owned), { headers });
+  return new Response(readerPage(env, rec.email, owned, token), { headers });
 }
 
-function readerPage(env, email, ownedIds) {
-  const items = ownedIds
-    .map((id) => `<li style="margin:0 0 10px;font-size:17px;">${escapeHtml(RECEIPT_NAMES[id] || id)}</li>`)
-    .join("");
-  return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Your library — What It Paid</title></head><body style="margin:0;padding:40px 20px;background:#f4efe3;font-family:sans-serif;"><div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:26px;padding:40px 36px;"><p style="font-size:26px;font-weight:800;color:#1a1713;margin:0 0 8px;">Your library 🧾</p><p style="color:#5a5347;font-size:15px;margin:0 0 24px;">Signed in as ${escapeHtml(email)} — this is everything you own:</p><ul style="padding-left:20px;color:#1a1713;">${items}</ul><p style="color:#8a8171;font-size:13px;line-height:1.6;margin-top:28px;">TEST BUILD — gated access verified. The interactive flip-book reader ships with the first Receipt launch; this page proves the magic-link gate works end to end.</p><p style="margin-top:20px;"><a href="${siteBase(env)}" style="color:#35a852;">whatitpaid.com</a></p></div></body></html>`;
+// Receipts whose gated assets (flip-book HTML + workbook PDF) are stored in
+// KV under asset:{id}:html / asset:{id}:pdf. A Receipt joins this list when
+// its assets are uploaded at its launch.
+const ASSET_RECEIPTS = ["receipt-01"];
+const ASSET_SLUG_RE = /^receipt-\d{2}(\.pdf)?$/;
+
+function isAssetSlug(s) {
+  return ASSET_SLUG_RE.test(s || "");
+}
+
+function readerPage(env, email, ownedIds, token) {
+  const ownsLibrary = ownedIds.includes("library");
+  const displayIds = ownsLibrary
+    ? RECEIPT_IDS
+    : ownedIds.filter((id) => id !== "library");
+  const items = displayIds.map((id) => {
+    const name = escapeHtml(RECEIPT_NAMES[id] || id);
+    if (ASSET_RECEIPTS.includes(id)) {
+      const bookHref = token ? `/read/${token}/${id}` : `/read/${id}`;
+      const pdfHref = token ? `/read/${token}/${id}.pdf` : `/read/${id}.pdf`;
+      return `<li style="margin:0 0 18px;font-size:17px;">${name}<br>` +
+        `<a href="${bookHref}" style="color:#35a852;font-weight:700;">Open the flip-book</a>` +
+        ` &nbsp;·&nbsp; <a href="${pdfHref}" style="color:#35a852;">Workbook PDF (printable)</a></li>`;
+    }
+    return `<li style="margin:0 0 18px;font-size:17px;">${name}<br>` +
+      `<span style="color:#8a8171;font-size:14px;">In production — it lands here the day it launches.</span></li>`;
+  }).join("");
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Your library — What It Paid</title></head><body style="margin:0;padding:40px 20px;background:#f4efe3;font-family:sans-serif;"><div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:26px;padding:40px 36px;"><p style="font-size:26px;font-weight:800;color:#1a1713;margin:0 0 8px;">Your library 🧾</p><p style="color:#5a5347;font-size:15px;margin:0 0 24px;">Signed in as ${escapeHtml(email)} — this is everything you own:</p><ul style="padding-left:20px;color:#1a1713;">${items}</ul><p style="color:#8a8171;font-size:13px;line-height:1.6;margin-top:28px;">Your flip-book answers save on this device, in this browser. The workbook PDF is the printable copy — worksheets and the 30-day plan included.</p><p style="margin-top:20px;"><a href="${siteBase(env)}" style="color:#35a852;">whatitpaid.com</a></p></div></body></html>`;
+}
+
+// --- Gated asset serving -----------------------------------------------------
+// The flip-book HTML and the workbook PDF live in KV (asset:{id}:html /
+// asset:{id}:pdf) and are served ONLY after the magic token (in the URL) or
+// the wip_session cookie proves a purchase of that Receipt (or the library).
+async function handleAsset(request, env, token, slug) {
+  const htmlHeaders = { "content-type": "text/html; charset=utf-8" };
+  let rec = await readTokenRecord(env, token);
+  if (!rec) {
+    const m = (request.headers.get("cookie") || "")
+      .match(/(?:^|;\s*)wip_session=([0-9a-f]{64})/);
+    if (m) rec = await readTokenRecord(env, m[1]);
+  }
+  if (!rec) {
+    return new Response(expiredPage(env), { status: 200, headers: htmlHeaders });
+  }
+  const buyer = await getBuyer(env, rec.email);
+  const owned = buyer?.receipt_ids?.length ? buyer.receipt_ids : rec.receipt_ids;
+  const isPdf = slug.endsWith(".pdf");
+  const receiptId = isPdf ? slug.slice(0, -".pdf".length) : slug;
+  if (!RECEIPT_IDS.includes(receiptId)) {
+    return new Response("Not found", { status: 404, headers: htmlHeaders });
+  }
+  if (!owned.includes(receiptId) && !owned.includes("library")) {
+    return new Response("That Receipt isn't in your library.", {
+      status: 403, headers: htmlHeaders,
+    });
+  }
+  const buf = await env.NOTIFY_KV.get(
+    `asset:${receiptId}:${isPdf ? "pdf" : "html"}`, "arrayBuffer");
+  if (!buf) {
+    return new Response("This Receipt is still being prepared — check back shortly.", {
+      status: 404, headers: htmlHeaders,
+    });
+  }
+  return new Response(buf, {
+    headers: {
+      "content-type": isPdf ? "application/pdf" : "text/html; charset=utf-8",
+      "content-disposition": isPdf
+        ? `inline; filename="${receiptId}-workbook.pdf"` : "inline",
+      "cache-control": "private, no-store",
+    },
+  });
 }
 
 function expiredPage(env) {
