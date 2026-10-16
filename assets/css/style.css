@@ -789,3 +789,18 @@ footer .copy { color: #8a8272; font-size: 13px; }
 .brandlock { display: flex; align-items: center; }
 .by-ua { font-family: 'Great Vibes', cursive; font-size: 22px; color: #6b6459; border-left: 1px solid #d4cdbd; padding-left: 12px; margin-left: 12px; text-decoration: none; white-space: nowrap; }
 .by-ua:hover { color: #1a1713; text-decoration: underline; }
+
+/* ============ phone parity pass (2026-10-16) ============
+   The phone view mirrors the desktop site: same header lockup, same hero
+   composition, nothing clipped or pushed off the pill. */
+@media (max-width: 760px) {
+  .header-inner { padding: 8px 12px; gap: 8px; }
+  .brandlock { min-width: 0; gap: 8px; }
+  .brand img { height: 30px; }
+  .by-ua { font-size: 12px; white-space: nowrap; }
+  .nav { gap: 0; }
+  .btn-small { padding: 8px 13px; font-size: 13px; white-space: nowrap; }
+  .hero { padding: 40px 0 8px; }
+  .hero-mark img { width: 84px; margin-bottom: 16px; }
+  .hero h1 { font-size: clamp(29px, 8.6vw, 68px); }
+}
