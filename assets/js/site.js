@@ -7,8 +7,7 @@
  * "join the list" note.
  */
 const CHECKOUT_ITEMS = {
-  "tiktok-shop-ai-characters": "receipt-01",
-  "restaurant-photo-outreach": "receipt-02"   // Receipt 02 — live via Stripe checkout
+  "tiktok-shop-ai-characters": "receipt-01",   // Receipt 01 — live via Stripe checkout
 };
 const GUMROAD_URLS = {
   "tiktok-shop-ai-characters": "#",   // case-01 — LIVE, paste Gumroad product URL
