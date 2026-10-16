@@ -1,9 +1,14 @@
 /* What It Paid — site config + interactions
  *
- * BUY LINKS: fill in each product's Gumroad URL below.
- * Format: "https://gumroad.com/l/<product-id>"
- * Leave as "#" and the button will show "Coming soon" state.
+ * BUY BUTTONS: a Receipt whose slug appears in CHECKOUT_ITEMS checks out
+ * through the whatitpaid-app Worker's Stripe checkout (POST /api/checkout,
+ * which returns a Stripe-hosted checkout URL). Any other slug falls back
+ * to GUMROAD_URLS below; leave as "#" and the button shows the
+ * "join the list" note.
  */
+const CHECKOUT_ITEMS = {
+  "tiktok-shop-ai-characters": "receipt-01",   // Receipt 01 — live via Stripe checkout
+};
 const GUMROAD_URLS = {
   "tiktok-shop-ai-characters": "#",   // case-01 — LIVE, paste Gumroad product URL
   "restaurant-photo-outreach": "#",   // case-02
@@ -13,8 +18,56 @@ const GUMROAD_URLS = {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Small note shown under a buy button (coming-soon and checkout errors)
+  function showBuyNote(btn, text) {
+    const wrap = btn.closest(".card, .signup-box") || document.body;
+    let note = wrap.querySelector(".buy-note");
+    if (!note) {
+      note = document.createElement("p");
+      note.className = "buy-note";
+      note.style.cssText =
+        "font-size:13px;color:var(--ivory-faint);margin-top:10px;";
+      btn.insertAdjacentElement("afterend", note);
+    }
+    note.textContent = text;
+  }
+
   // Wire buy buttons from config
   document.querySelectorAll("[data-buy]").forEach((btn) => {
+    const receiptId = CHECKOUT_ITEMS[btn.dataset.buy];
+    if (receiptId) {
+      // Stripe checkout via the Worker: create a session, then redirect.
+      btn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        if (btn.dataset.busy) return;
+        btn.dataset.busy = "1";
+        const original = btn.textContent;
+        btn.textContent = "Opening checkout…";
+        try {
+          const body = { items: [receiptId] };
+          const ref = new URLSearchParams(location.search).get("ref");
+          if (ref) body.referral_code = ref.slice(0, 16);
+          const res = await fetch("https://whatitpaid.com/api/checkout", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(body),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (res.ok && data.ok && data.url) {
+            location.href = data.url;
+            return;
+          }
+          throw new Error(data.error || "checkout failed");
+        } catch (err) {
+          console.error("checkout failed:", err);
+          btn.textContent = original;
+          delete btn.dataset.busy;
+          showBuyNote(btn,
+            "Checkout couldn't open just now — try again in a minute, or join the list below and we'll let you know the moment it's back.");
+        }
+      });
+      return;
+    }
     const url = GUMROAD_URLS[btn.dataset.buy];
     if (url && url !== "#") {
       btn.href = url;
@@ -23,17 +76,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
-        const wrap = btn.closest(".card, .signup-box") || document.body;
-        let note = wrap.querySelector(".buy-note");
-        if (!note) {
-          note = document.createElement("p");
-          note.className = "buy-note";
-          note.style.cssText =
-            "font-size:13px;color:var(--ivory-faint);margin-top:10px;";
-          note.textContent =
-            "Checkout link goes live with the product — join the list below and we'll tell you the moment it drops.";
-          btn.insertAdjacentElement("afterend", note);
-        }
+        showBuyNote(btn,
+          "Checkout link goes live with the product — join the list below and we'll tell you the moment it drops.");
       });
     }
   });
