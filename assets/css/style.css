@@ -13,7 +13,7 @@
   --green-clay-hi: #4cc36d;
   --green-clay-deep: #237a3a;
   --radius-slab: 26px;
-  --font: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font: "WIPClay", "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --script: "Great Vibes", cursive;
 }
 /* ============ What It Paid clay color font (v2.200) ============ */
@@ -232,7 +232,7 @@ a:hover { color: var(--green-clay); }
 .catalog { padding: 50px 0 30px; }
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 28px;
   margin-top: 44px;
 }
@@ -760,8 +760,8 @@ footer .copy { color: #8a8272; font-size: 13px; }
 @media (max-width: 760px) {
   .how-grid { grid-template-columns: 1fr; }
   .product-grid { grid-template-columns: 1fr; }
-  .card .claim { padding-right: 0; }
-  .badge { position: static; display: inline-block; margin-bottom: 14px; }
+  
+  
   .signup-form { flex-direction: column; }
   .nav a:not(.btn-small) { display: none; }
   .header-inner { padding: 8px 16px; }
@@ -769,8 +769,8 @@ footer .copy { color: #8a8272; font-size: 13px; }
   .site-header { margin: 10px 10px 0; }
   .receipt { padding: 34px 28px; }
   .card { padding: 30px 26px; }
-  .card-foot { flex-direction: column; align-items: stretch; text-align: center; }
-  .btn-buy, .btn-notify { text-align: center; }
+  
+  
 }
 
 /* ============ mobile centering hardening ============ */
@@ -779,7 +779,7 @@ footer .copy { color: #8a8272; font-size: 13px; }
   .hero, .section-head, .section-sub,
   .promise-strip, .signup, footer { text-align: center; }
   .how-card, .card, .signup-box { text-align: left; }
-  .card-foot { text-align: center; }
+  
   .updates-box { padding: 38px 26px; }
   .referral-box { padding: 38px 26px; }
   .catalog-tools { margin-top: 22px; }
@@ -808,4 +808,26 @@ footer .copy { color: #8a8272; font-size: 13px; }
   .brandlock .by-ua { overflow: hidden; text-overflow: ellipsis; }
   .nav { flex: 0 0 auto; }
   .btn-small { padding: 7px 12px; font-size: 12.5px; white-space: nowrap; flex: 0 0 auto; }
+}
+
+/* ============ Wide cards, book image, sample presentation (2026-10-16) ============ */
+.card { display: grid; grid-template-columns: 292px 1fr; column-gap: 30px; align-items: start; }
+.card > * { grid-column: 2; min-width: 0; }
+.card > .card-media { grid-column: 1; grid-row: 1 / span 12; }
+.card-media { margin: 0; position: relative; display: block; border-radius: 16px; overflow: hidden; background: #1e1b17; border: 1px solid rgba(244,239,227,.14); }
+.card-media img { width: 100%; height: 100%; aspect-ratio: 4 / 3; object-fit: contain; display: block; }
+a.card-media { cursor: pointer; }
+a.card-media img { transition: transform .25s ease; }
+a.card-media:hover img { transform: scale(1.03); }
+.sample-chip { position: absolute; left: 12px; bottom: 12px; background: linear-gradient(180deg, var(--green-clay-hi), var(--green-clay-deep)); color: #fff; font-size: 13px; font-weight: 900; padding: 8px 14px; border-radius: 999px; box-shadow: 0 6px 16px rgba(0,0,0,.4); text-shadow: 0 1px 2px rgba(0,0,0,.3); }
+.sample-modal { position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center; }
+.sample-modal[hidden] { display: none; }
+.sample-backdrop { position: absolute; inset: 0; background: rgba(20,16,10,.82); }
+.sample-box { position: relative; width: min(920px, 92vw); background: #1e1b17; border-radius: 18px; padding: 14px; box-shadow: 0 30px 80px rgba(0,0,0,.55); }
+.sample-box video { width: 100%; height: auto; aspect-ratio: 1120 / 742; background: #000; border-radius: 10px; display: block; }
+.sample-close { position: absolute; top: -14px; right: -14px; width: 38px; height: 38px; border-radius: 50%; border: none; background: var(--clay-dark); color: var(--ivory); font-size: 22px; line-height: 1; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,.45); z-index: 2; }
+@media (max-width: 760px) {
+  .card { grid-template-columns: 1fr; row-gap: 18px; }
+  .card > * { grid-column: 1; }
+  .card > .card-media { grid-row: auto; }
 }
