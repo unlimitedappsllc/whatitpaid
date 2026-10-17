@@ -193,3 +193,38 @@ document.addEventListener("DOMContentLoaded", () => {
     searchInput.focus();
   });
 });
+
+/* Sample presentations: clicking a card's book image opens its narrated sample. */
+(function () {
+  var SAMPLES = { "receipt-01": "assets/video/receipt-01-sample.mp4" };
+  var modal = document.getElementById("sampleModal");
+  var video = document.getElementById("sampleVideo");
+  if (!modal || !video) return;
+  function openSample(id) {
+    if (!SAMPLES[id]) return;
+    video.src = SAMPLES[id];
+    modal.hidden = false;
+    document.body.style.overflow = "hidden";
+    var p = video.play();
+    if (p && p.catch) p.catch(function () {});
+  }
+  function closeSample() {
+    video.pause();
+    video.removeAttribute("src");
+    video.load();
+    modal.hidden = true;
+    document.body.style.overflow = "";
+  }
+  document.querySelectorAll("[data-sample]").forEach(function (el) {
+    el.addEventListener("click", function (ev) {
+      ev.preventDefault();
+      openSample(el.getAttribute("data-sample"));
+    });
+  });
+  modal.querySelectorAll("[data-close-sample]").forEach(function (el) {
+    el.addEventListener("click", closeSample);
+  });
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape" && !modal.hidden) closeSample();
+  });
+})();
