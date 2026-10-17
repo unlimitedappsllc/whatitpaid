@@ -813,6 +813,7 @@ footer .copy { color: #8a8272; font-size: 13px; }
 /* ============ Wide cards, book image, sample presentation (2026-10-16) ============ */
 .card { display: grid; grid-template-columns: 292px 1fr; column-gap: 30px; align-items: start; }
 .card > * { grid-column: 2; min-width: 0; }
+.card .cat-tag { justify-self: start; }
 .card > .card-media { grid-column: 1; grid-row: 1 / span 12; }
 .card-media { margin: 0; position: relative; display: block; border-radius: 16px; overflow: hidden; background: #1e1b17; border: 1px solid rgba(244,239,227,.14); }
 .card-media img { width: 100%; height: 100%; aspect-ratio: 4 / 3; object-fit: contain; display: block; }
@@ -827,7 +828,7 @@ a.card-media:hover img { transform: scale(1.03); }
 .sample-box video { width: 100%; height: auto; aspect-ratio: 1120 / 742; background: #000; border-radius: 10px; display: block; }
 .sample-close { position: absolute; top: -14px; right: -14px; width: 38px; height: 38px; border-radius: 50%; border: none; background: var(--clay-dark); color: var(--ivory); font-size: 22px; line-height: 1; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,.45); z-index: 2; }
 @media (max-width: 760px) {
-  .card { grid-template-columns: 1fr; row-gap: 18px; }
+  .card { grid-template-columns: 1fr; row-gap: 18px; padding-top: 68px; }
   .card > * { grid-column: 1; }
   .card > .card-media { grid-row: auto; }
 }
