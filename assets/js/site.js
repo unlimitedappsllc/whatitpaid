@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /* Sample presentations: clicking a card's book image opens its narrated sample. */
 (function () {
-  var SAMPLES = { "receipt-01": "assets/video/receipt-01-sample.mp4?v=2" };
+  var SAMPLES = { "receipt-01": "assets/video/receipt-01-sample.mp4?v=3" };
   var modal = document.getElementById("sampleModal");
   var video = document.getElementById("sampleVideo");
   if (!modal || !video) return;
