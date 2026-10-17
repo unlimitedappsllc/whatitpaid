@@ -13,13 +13,13 @@
   --green-clay-hi: #4cc36d;
   --green-clay-deep: #237a3a;
   --radius-slab: 26px;
-  --font: "WIPClay", "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --script: "Great Vibes", cursive;
 }
 /* ============ What It Paid clay color font (v2.200) ============ */
 @font-face {
   font-family: "WIPClay";
-  src: url("../fonts/WhatItPaidClay-Bold-web.woff2") format("woff2");
+  src: url("../fonts/WhatItPaidClayColor-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
