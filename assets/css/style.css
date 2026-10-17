@@ -19,7 +19,7 @@
 /* ============ What It Paid clay color font (v2.200) ============ */
 @font-face {
   font-family: "WIPClay";
-  src: url("../fonts/WhatItPaidClayColor-Bold.woff2") format("woff2");
+  src: url("../fonts/WhatItPaidClay-Bold-web.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -30,7 +30,7 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
 
 body {
   font-family: var(--font);
@@ -803,4 +803,9 @@ footer .copy { color: #8a8272; font-size: 13px; }
   .hero { padding: 40px 0 8px; }
   .hero-mark img { width: 84px; margin-bottom: 16px; }
   .hero h1 { font-size: clamp(26px, 6.9vw, 68px); }
+  .header-inner { flex-wrap: nowrap; }
+  .brandlock { flex: 1 1 auto; min-width: 0; }
+  .brandlock .by-ua { overflow: hidden; text-overflow: ellipsis; }
+  .nav { flex: 0 0 auto; }
+  .btn-small { padding: 7px 12px; font-size: 12.5px; white-space: nowrap; flex: 0 0 auto; }
 }
